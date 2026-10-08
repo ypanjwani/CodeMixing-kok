@@ -1,0 +1,235 @@
+<title>Code-Mixed LID Results</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<style>
+/* Layout: single reading column (~880px) of numbered report sections; charts and tables sit inside the flow. */
+:root {
+  --bg: #f6f7f9; --surface: #ffffff; --ink: #14171c; --ink-2: #4a505a; --muted: #7b828d;
+  --rule: #dfe3e8; --accent: #2a78d6; --accent-ink: #1c5cab; --syn: #eb6834; --on-accent: #ffffff;
+  --ok: #0f7a3d; --ok-bg: #e3f4ea; --no: #b42323; --no-bg: #fbe7e6; --na: #7a5a00; --na-bg: #fbf1d6;
+  --bar-dim: #b9c0ca;
+  --f-display: "IBM Plex Sans Condensed", "Arial Narrow", system-ui, sans-serif;
+  --f-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #121417; --surface: #1a1d22; --ink: #eceff3; --ink-2: #b5bcc6; --muted: #87909c;
+  --rule: #2c3138; --accent: #3987e5; --accent-ink: #8db8ef; --syn: #d95926; --on-accent: #ffffff;
+  --ok: #6fd39a; --ok-bg: #16301f; --no: #f08a85; --no-bg: #3a1a19; --na: #e8c35a; --na-bg: #33290f;
+  --bar-dim: #4a515c; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #121417; --surface: #1a1d22; --ink: #eceff3; --ink-2: #b5bcc6; --muted: #87909c;
+  --rule: #2c3138; --accent: #3987e5; --accent-ink: #8db8ef; --syn: #d95926; --on-accent: #ffffff;
+  --ok: #6fd39a; --ok-bg: #16301f; --no: #f08a85; --no-bg: #3a1a19; --na: #e8c35a; --na-bg: #33290f;
+  --bar-dim: #4a515c; color-scheme: dark; }
+body { background: var(--bg); color: var(--ink); font: 15px/1.6 var(--f-body); }
+.wrap { max-width: 880px; margin: 0 auto; padding-inline: 20px; padding-block: 40px 72px; display: grid; gap: 44px; }
+header { display: grid; gap: 10px; }
+.eyebrow { font: 500 12px/1 var(--f-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--accent-ink); }
+h1 { font: 700 clamp(30px, 5vw, 44px)/1.08 var(--f-display); margin: 0; text-wrap: balance; }
+h2 { font: 600 24px/1.2 var(--f-display); margin: 0; text-wrap: balance; display: flex; gap: 12px; align-items: baseline; }
+h2 .n { font: 500 13px/1 var(--f-mono); color: var(--muted); }
+h3 { font: 600 15px/1.3 var(--f-body); margin: 8px 0 0; }
+p { margin: 0; max-width: 68ch; color: var(--ink-2); }
+.lede { font-size: 17px; color: var(--ink-2); }
+section { display: grid; gap: 16px; min-width: 0; }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
+.stat { background: var(--surface); border: 1px solid var(--rule); border-radius: 8px; padding: 16px; display: grid; gap: 4px; }
+.stat .k { font: 500 12px/1.2 var(--f-mono); color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+.stat .v { font: 600 30px/1.1 var(--f-display); font-variant-numeric: tabular-nums; }
+.stat .s { font-size: 13px; color: var(--ink-2); }
+.stat.lead { border-color: var(--accent); }
+.stat.lead .v { color: var(--accent-ink); }
+.tw { overflow-x: auto; border: 1px solid var(--rule); border-radius: 8px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+th, td { padding: 9px 12px; text-align: left; border-bottom: 1px solid var(--rule); white-space: nowrap; }
+tbody tr:last-child td, tbody tr:last-child th { border-bottom: 0; }
+thead th { font: 500 12px/1.2 var(--f-mono); color: var(--muted); text-transform: uppercase; letter-spacing: .05em; background: var(--bg); }
+td { font-variant-numeric: tabular-nums; }
+table.claims td:first-child { white-space: normal; min-width: 180px; font-weight: 500; color: var(--ink); }
+.pill { display: inline-flex; align-items: center; gap: 6px; font: 500 12px/1 var(--f-body); padding: 5px 9px; border-radius: 999px; }
+.pill::before { font-weight: 700; }
+.pill.ok { color: var(--ok); background: var(--ok-bg); } .pill.ok::before { content: "✓"; }
+.pill.no { color: var(--no); background: var(--no-bg); } .pill.no::before { content: "✕"; }
+.pill.na { color: var(--na); background: var(--na-bg); } .pill.na::before { content: "–"; }
+.card { background: var(--surface); border: 1px solid var(--rule); border-radius: 8px; padding: 14px 16px 6px; display: grid; gap: 6px; min-width: 0; }
+.legend { display: flex; flex-wrap: wrap; gap: 16px; font-size: 13px; color: var(--ink-2); }
+.legend i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; }
+.legend i.d { width: 11px; height: 11px; transform: rotate(45deg) scale(.8); border-radius: 1px; background: none; border: 2px solid var(--ink); }
+svg.chart { width: 100%; height: auto; display: block; }
+svg .grid { stroke: var(--rule); stroke-width: 1; }
+svg .tick { fill: var(--muted); font: 11px var(--f-mono); }
+svg .lab { fill: var(--ink-2); font: 13px var(--f-body); }
+svg .val { fill: var(--ink); font: 500 12px var(--f-mono); }
+svg .bar { fill: var(--bar-dim); } svg .bar.hl { fill: var(--accent); } svg .bar.syn { fill: var(--syn); }
+svg .paper { fill: var(--surface); stroke: var(--ink); stroke-width: 2; }
+.note { background: var(--na-bg); border-radius: 8px; padding: 12px 14px; color: var(--ink); max-width: none; }
+.warn { border-left: 3px solid var(--syn); padding: 2px 0 2px 14px; }
+ul, ol { margin: 0; padding-left: 20px; color: var(--ink-2); display: grid; gap: 6px; max-width: 70ch; }
+li b, p b { color: var(--ink); }
+.mini { display: inline-block; width: 56px; height: 6px; border-radius: 3px; background: var(--rule); margin-right: 8px; vertical-align: 2px; overflow: hidden; }
+.mini span { display: block; height: 100%; background: var(--accent); }
+td small { color: var(--muted); }
+table.cmx th { font: 500 12px/1.2 var(--f-mono); }
+table.cmx tbody th { color: var(--ink-2); background: var(--bg); }
+td.cm { text-align: right; background: color-mix(in oklab, var(--accent) var(--s), var(--surface)); color: var(--ink); }
+td.cm[data-strong="1"] { color: var(--on-accent); font-weight: 500; }
+code, pre { font-family: var(--f-mono); font-size: 13px; }
+pre { background: var(--surface); border: 1px solid var(--rule); border-radius: 8px; padding: 14px; overflow-x: auto; margin: 0; }
+.two { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+footer { font-size: 13px; color: var(--muted); }
+</style>
+
+<div class="wrap">
+<header>
+  <div class="eyebrow">Reproduction report · token-level code-mixed language identification</div>
+  <h1>Optimizing Code-Mixed Language Identification with Adam and Gradient-Based Deep Neural Networks</h1>
+  <p class="lede">An independent re-run of the paper's CNN-BiLSTM-Adam model and every experiment it reports, on a
+  rebuilt dataset of 48,053 sentences in five language pairs. All numbers come from real training
+  runs. Nothing was tuned toward the paper's figures.</p>
+</header>
+
+<section>
+  <div class="stats">
+    <div class="stat lead"><span class="k">Accuracy · 5 seeds</span><span class="v">92.2%</span>
+      <span class="s">± 1.1 pts · paper 92.6%</span></div>
+    <div class="stat"><span class="k">Weighted F1</span><span class="v">0.921</span><span class="s">paper 0.925</span></div>
+    <div class="stat"><span class="k">AUC-ROC</span><span class="v">0.992</span><span class="s">paper 0.930</span></div>
+    <div class="stat"><span class="k">Test tokens</span><span class="v">52,262</span><span class="s">4,805 sentences</span></div>
+  </div>
+</section>
+
+<section id="claims">
+  <h2><span class="n">01</span>Which claims hold up</h2>
+  <p>The headline accuracy, F1, precision and recall reproduce within seed noise. Three other claims do not:
+  the CNN layer, Adam's edge over AdamW and RMSprop, and the seed stability. The pretrained-transformer
+  comparison was not run.</p>
+  <div class="tw"><table class="claims"><thead><tr><th>Claim in the paper</th><th>Paper</th><th>This reproduction</th><th>Verdict</th></tr></thead><tbody><tr><td>Proposed model accuracy</td><td>0.926</td><td>0.922 ± 0.011</td><td><span class="pill ok">Holds, within seed noise</span></td></tr><tr><td>F1 / precision / recall</td><td>0.925 / 0.926 / 0.924</td><td>0.921 / 0.923 / 0.922</td><td><span class="pill ok">Holds</span></td></tr><tr><td>BiLSTM component helps</td><td>+5.6 pts</td><td>+9.1 pts</td><td><span class="pill ok">Holds</span></td></tr><tr><td>Adam beats SGD</td><td>+4.4 pts</td><td>+13.1 pts</td><td><span class="pill ok">Holds</span></td></tr><tr><td>Proposed beats Transformer</td><td>0.926 vs 0.900</td><td>0.922 vs 0.900</td><td><span class="pill ok">Holds</span></td></tr><tr><td>Learning rate 0.001 is best</td><td>yes</td><td>yes</td><td><span class="pill ok">Holds</span></td></tr><tr><td>CNN component helps</td><td>+4.6 pts</td><td>-1.7 pts</td><td><span class="pill no">Does not hold</span></td></tr><tr><td>Adam beats AdamW / RMSprop</td><td>+1.1 / +2.5 pts</td><td>-0.5 / -0.1 pts</td><td><span class="pill no">Does not hold (tied)</span></td></tr><tr><td>Stable across seeds</td><td>± 0.002</td><td>± 0.011</td><td><span class="pill no">Does not hold</span></td></tr><tr><td>Beats BERT / mBERT / XLM-R</td><td>0.926 vs 0.90–0.91</td><td>not run</td><td><span class="pill na">Not verified</span></td></tr></tbody></table></div>
+</section>
+
+<section id="data">
+  <h2><span class="n">02</span>Data</h2>
+  <p>The authors' annotated corpus is not public. The dataset was rebuilt from the paper's Table 1 sources.
+  <b>75% of sentences are synthetic</b>, and the paper must say so.</p>
+  <div class="card">
+    <div class="legend"><span><i style="background:var(--accent)"></i>Real</span><span><i style="background:var(--syn)"></i>Synthetic</span></div>
+    <svg viewBox="0 0 680 204" role="img" class="chart"><line x1="150.0" x2="150.0" y1="6" y2="178" class="grid"/><text x="150.0" y="196" class="tick" text-anchor="middle">0k</text><line x1="216.3" x2="216.3" y1="6" y2="178" class="grid"/><text x="216.3" y="196" class="tick" text-anchor="middle">2k</text><line x1="282.6" x2="282.6" y1="6" y2="178" class="grid"/><text x="282.6" y="196" class="tick" text-anchor="middle">5k</text><line x1="349.0" x2="349.0" y1="6" y2="178" class="grid"/><text x="349.0" y="196" class="tick" text-anchor="middle">7k</text><line x1="415.3" x2="415.3" y1="6" y2="178" class="grid"/><text x="415.3" y="196" class="tick" text-anchor="middle">10k</text><line x1="481.6" x2="481.6" y1="6" y2="178" class="grid"/><text x="481.6" y="196" class="tick" text-anchor="middle">12k</text><line x1="547.9" x2="547.9" y1="6" y2="178" class="grid"/><text x="547.9" y="196" class="tick" text-anchor="middle">15k</text><text x="140" y="25" class="lab" text-anchor="end">Hindi-English</text><rect x="150" y="13" width="138.8" height="18" rx="3" class="bar hl"><title>Hindi-English real: 5,232</title></rect><rect x="290.8" y="13" width="319.2" height="18" rx="3" class="bar syn"><title>Hindi-English synthetic: 12,108</title></rect><text x="616.0" y="26" class="val">17,340</text><text x="140" y="59" class="lab" text-anchor="end">Spanish-English</text><rect x="150.0" y="47" width="280.1" height="18" rx="3" class="bar syn"><title>Spanish-English synthetic: 10,557</title></rect><text x="436.1" y="60" class="val">10,557</text><text x="140" y="93" class="lab" text-anchor="end">Bengali-English</text><rect x="150.0" y="81" width="230.0" height="18" rx="3" class="bar syn"><title>Bengali-English synthetic: 8,670</title></rect><text x="386.0" y="94" class="val">8,670</text><text x="140" y="127" class="lab" text-anchor="end">English-Kokborok</text><rect x="150" y="115" width="185.3" height="18" rx="3" class="bar hl"><title>English-Kokborok real: 6,986</title></rect><text x="341.3" y="128" class="val">6,986</text><text x="140" y="161" class="lab" text-anchor="end">Kokborok-Bengali</text><rect x="150.0" y="149" width="119.4" height="18" rx="3" class="bar syn"><title>Kokborok-Bengali synthetic: 4,500</title></rect><text x="275.4" y="162" class="val">4,500</text></svg>
+  </div>
+  <div class="tw"><table class=""><thead><tr><th>Language pair</th><th>Sentences</th><th>Real</th><th>Synthetic</th><th>Avg. words</th><th>Mix ratio</th><th>Paper</th></tr></thead><tbody><tr><td>Hindi-English</td><td>17,340</td><td>5,232</td><td>12,108</td><td>13.33</td><td>0.334</td><td>17,340</td></tr><tr><td>Spanish-English</td><td>10,557</td><td>0</td><td>10,557</td><td>11.0</td><td>0.396</td><td>10,557</td></tr><tr><td>Bengali-English</td><td>8,670</td><td>0</td><td>8,670</td><td>9.87</td><td>0.42</td><td>8,670</td></tr><tr><td>English-Kokborok</td><td>6,986</td><td>6,986</td><td>0</td><td>7.48</td><td>0.32</td><td>7,330</td></tr><tr><td>Kokborok-Bengali</td><td>4,500</td><td>0</td><td>4,500</td><td>7.46</td><td>0.326</td><td>4,500</td></tr><tr><td><b>Total</b></td><td><b>48,053</b></td><td></td><td></td><td></td><td></td><td><b>48,397</b></td></tr></tbody></table></div>
+  <ul>
+    <li><b>Real:</b> LinCE Hindi-English, with gold labels on every word, and the authors' English-Kokborok
+      corpus (6,986 unique sentences).</li>
+    <li><b>Silver labels:</b> the English-Kokborok words were tagged automatically, using the English-Kokborok-Bengali
+      Dictionary (Binoy Debbarma) plus context rules. A native speaker has not checked them.</li>
+    <li><b>Synthetic:</b> FLORES-200 and MCS-350 single-language sentences were mixed by inserting 1–3-word spans
+      of the other language. The Kokborok-Bengali sentences replace the English spans in real Kokborok text with
+      romanized Bengali.</li>
+    <li><b>Romanized:</b> Hindi and Bengali are written in Latin script, as on social media.</li>
+    <li><b>No leakage:</b> each source sentence was assigned to train, validation or test before mixing.</li>
+  </ul>
+</section>
+
+<section id="method">
+  <h2><span class="n">03</span>Model and training</h2>
+  <p>The setup follows the paper's Table 5: trainable 300-d embeddings, Conv1D (128 filters, kernel 3, ReLU),
+  max-pooling, BiLSTM (128), dropout 0.5 and a softmax over 5 languages for each word. Training uses Adam
+  (lr 0.001, β₁ 0.9, β₂ 0.999), batch 64, up to 50 epochs, with early stopping on validation loss.</p>
+  <h3>Deviations from the paper</h3>
+  <ol>
+    <li><b>Max-pooling uses stride 1.</b> Pooling over the whole sentence would leave one vector per sentence, which
+      makes per-word labels impossible.</li>
+    <li><b>PyTorch instead of Keras.</b> The architecture is the same.</li>
+    <li><b>Hardware:</b> one RTX 3050 laptop GPU. Cooling pauses are excluded from the training times.</li>
+    <li><b>SGD uses momentum 0.9.</b> All optimizers share the learning rate 0.001.</li>
+  </ol>
+</section>
+
+<section id="seeds">
+  <h2><span class="n">04</span>Main result across five seeds</h2>
+  <div class="tw"><table class=""><thead><tr><th>Seed</th><th>Accuracy</th><th>F1</th><th>Precision</th><th>Recall</th><th>MCC</th><th>AUC-ROC</th></tr></thead><tbody><tr><td>42</td><td>0.923</td><td>0.922</td><td>0.923</td><td>0.923</td><td>0.886</td><td>0.992</td></tr><tr><td>123</td><td>0.913</td><td>0.912</td><td>0.915</td><td>0.913</td><td>0.871</td><td>0.992</td></tr><tr><td>256</td><td>0.935</td><td>0.935</td><td>0.935</td><td>0.935</td><td>0.905</td><td>0.994</td></tr><tr><td>512</td><td>0.908</td><td>0.907</td><td>0.908</td><td>0.908</td><td>0.864</td><td>0.990</td></tr><tr><td>1024</td><td>0.930</td><td>0.931</td><td>0.933</td><td>0.930</td><td>0.900</td><td>0.992</td></tr><tr><td><b>Mean ± SD</b></td><td><b>0.922 ± 0.011</b></td><td><b>0.921 ± 0.012</b></td><td><b>0.923 ± 0.011</b></td><td><b>0.922 ± 0.011</b></td><td><b>0.885 ± 0.018</b></td><td><b>0.992 ± 0.002</b></td></tr></tbody></table></div>
+  <p>Accuracy varies by ±1.1 points between seeds. The paper reports ±0.2.</p>
+</section>
+
+<section id="baselines">
+  <h2><span class="n">05</span>Baselines</h2>
+  <div class="card">
+    <div class="legend"><span><i style="background:var(--accent)"></i>Proposed model (mean of 5 seeds)</span>
+      <span><i style="background:var(--bar-dim)"></i>Baselines</span><span><i class="d"></i>Paper's number</span></div>
+    <svg viewBox="0 0 680 170" role="img" class="chart"><line x1="210.0" x2="210.0" y1="6" y2="144" class="grid"/><text x="210.0" y="162" class="tick" text-anchor="middle">0.750</text><line x1="311.5" x2="311.5" y1="6" y2="144" class="grid"/><text x="311.5" y="162" class="tick" text-anchor="middle">0.812</text><line x1="413.0" x2="413.0" y1="6" y2="144" class="grid"/><text x="413.0" y="162" class="tick" text-anchor="middle">0.875</text><line x1="514.5" x2="514.5" y1="6" y2="144" class="grid"/><text x="514.5" y="162" class="tick" text-anchor="middle">0.938</text><line x1="616.0" x2="616.0" y1="6" y2="144" class="grid"/><text x="616.0" y="162" class="tick" text-anchor="middle">1.000</text><text x="200" y="25" class="lab" text-anchor="end">Proposed CNN-BiLSTM-Adam</text><rect x="210" y="13" width="279.0" height="18" rx="3" class="bar hl"><title>Proposed CNN-BiLSTM-Adam: 0.922 (paper 0.926)</title></rect><text x="495.0" y="26" class="val">0.922</text><path d="M495.8 10 l6 12 l-6 12 l-6 -12z" class="paper"><title>Paper: 0.926</title></path><text x="200" y="59" class="lab" text-anchor="end">Baseline RNN (BiLSTM)</text><rect x="210" y="47" width="306.5" height="18" rx="3" class="bar"><title>Baseline RNN (BiLSTM): 0.939 (paper 0.860)</title></rect><text x="522.5" y="60" class="val">0.939</text><path d="M388.6 44 l6 12 l-6 12 l-6 -12z" class="paper"><title>Paper: 0.860</title></path><text x="200" y="93" class="lab" text-anchor="end">Transformer (scratch)</text><rect x="210" y="81" width="244.4" height="18" rx="3" class="bar"><title>Transformer (scratch): 0.900 (paper 0.900)</title></rect><text x="460.4" y="94" class="val">0.900</text><path d="M453.6 78 l6 12 l-6 12 l-6 -12z" class="paper"><title>Paper: 0.900</title></path><text x="200" y="127" class="lab" text-anchor="end">Baseline CNN</text><rect x="210" y="115" width="133.1" height="18" rx="3" class="bar"><title>Baseline CNN: 0.832 (paper 0.870)</title></rect><text x="349.1" y="128" class="val">0.832</text><path d="M404.9 112 l6 12 l-6 12 l-6 -12z" class="paper"><title>Paper: 0.870</title></path></svg>
+  </div>
+  <div class="tw"><table class=""><thead><tr><th>Method</th><th>Accuracy</th><th>F1</th><th>Macro F1</th><th>AUC-ROC</th><th>Train time</th><th>Paper acc.</th></tr></thead><tbody><tr><td>Proposed CNN-BiLSTM-Adam</td><td>0.923</td><td>0.922</td><td>0.907</td><td>0.992</td><td>104 s</td><td>0.926</td></tr><tr><td>Baseline RNN (BiLSTM)</td><td>0.939</td><td>0.938</td><td>0.930</td><td>0.996</td><td>530 s</td><td>0.860</td></tr><tr><td>Transformer (scratch)</td><td>0.900</td><td>0.901</td><td>0.886</td><td>0.990</td><td>1223 s</td><td>0.900</td></tr><tr><td>Baseline CNN</td><td>0.832</td><td>0.829</td><td>0.805</td><td>0.965</td><td>161 s</td><td>0.870</td></tr><tr><td>mBERT / XLM-R (fine-tuned)</td><td>not run</td><td></td><td></td><td></td><td></td><td>0.900 / 0.910</td></tr></tbody></table></div>
+  <ul>
+    <li><b>The BiLSTM alone scored 93.9%</b>, higher than the CNN-BiLSTM. Convolution and pooling
+      blend each word with its neighbours, which blurs the signal at language-switch points.</li>
+    <li><b>The CNN alone</b> sees only a 3-word window and is the weakest model (83.2%).</li>
+    <li><b>The Transformer trained from scratch</b> (90.0%) has no pretraining and only
+      about 38k training sentences.</li>
+  </ul>
+  <p class='note'><b>Preliminary, not a result:</b> an interrupted mBERT run reached <b>96.9%</b> validation accuracy after one epoch, above the proposed model. The paper's claim that the proposed model beats BERT, mBERT and XLM-R should not be kept until these runs are completed.</p>
+</section>
+
+<section id="optimizers">
+  <h2><span class="n">06</span>Optimizers and ablation</h2>
+  <div class="two">
+    <div class="card"><h3>Optimizer, all at lr 0.001</h3><svg viewBox="0 0 680 170" role="img" class="chart"><line x1="210.0" x2="210.0" y1="6" y2="144" class="grid"/><text x="210.0" y="162" class="tick" text-anchor="middle">0.750</text><line x1="311.5" x2="311.5" y1="6" y2="144" class="grid"/><text x="311.5" y="162" class="tick" text-anchor="middle">0.812</text><line x1="413.0" x2="413.0" y1="6" y2="144" class="grid"/><text x="413.0" y="162" class="tick" text-anchor="middle">0.875</text><line x1="514.5" x2="514.5" y1="6" y2="144" class="grid"/><text x="514.5" y="162" class="tick" text-anchor="middle">0.938</text><line x1="616.0" x2="616.0" y1="6" y2="144" class="grid"/><text x="616.0" y="162" class="tick" text-anchor="middle">1.000</text><text x="200" y="25" class="lab" text-anchor="end">Adam (proposed)</text><rect x="210" y="13" width="280.5" height="18" rx="3" class="bar hl"><title>Adam (proposed): 0.923 (paper 0.926)</title></rect><text x="496.5" y="26" class="val">0.923</text><path d="M495.8 10 l6 12 l-6 12 l-6 -12z" class="paper"><title>Paper: 0.926</title></path><text x="200" y="59" class="lab" text-anchor="end">AdamW</text><rect x="210" y="47" width="288.7" height="18" rx="3" class="bar"><title>AdamW: 0.928 (paper 0.915)</title></rect><text x="504.7" y="60" class="val">0.928</text><path d="M478.0 44 l6 12 l-6 12 l-6 -12z" class="paper"><title>Paper: 0.915</title></path><text x="200" y="93" class="lab" text-anchor="end">RMSprop</text><rect x="210" y="81" width="282.7" height="18" rx="3" class="bar"><title>RMSprop: 0.924 (paper 0.901)</title></rect><text x="498.7" y="94" class="val">0.924</text><path d="M455.2 78 l6 12 l-6 12 l-6 -12z" class="paper"><title>Paper: 0.901</title></path><text x="200" y="127" class="lab" text-anchor="end">SGD</text><rect x="210" y="115" width="67.4" height="18" rx="3" class="bar"><title>SGD: 0.792 (paper 0.882)</title></rect><text x="283.4" y="128" class="val">0.792</text><path d="M424.4 112 l6 12 l-6 12 l-6 -12z" class="paper"><title>Paper: 0.882</title></path></svg></div>
+    <div class="card"><h3>Remove one component</h3><svg viewBox="0 0 680 170" role="img" class="chart"><line x1="210.0" x2="210.0" y1="6" y2="144" class="grid"/><text x="210.0" y="162" class="tick" text-anchor="middle">0.750</text><line x1="311.5" x2="311.5" y1="6" y2="144" class="grid"/><text x="311.5" y="162" class="tick" text-anchor="middle">0.812</text><line x1="413.0" x2="413.0" y1="6" y2="144" class="grid"/><text x="413.0" y="162" class="tick" text-anchor="middle">0.875</text><line x1="514.5" x2="514.5" y1="6" y2="144" class="grid"/><text x="514.5" y="162" class="tick" text-anchor="middle">0.938</text><line x1="616.0" x2="616.0" y1="6" y2="144" class="grid"/><text x="616.0" y="162" class="tick" text-anchor="middle">1.000</text><text x="200" y="25" class="lab" text-anchor="end">Full model</text><rect x="210" y="13" width="280.5" height="18" rx="3" class="bar hl"><title>Full model: 0.923 (paper 0.926)</title></rect><text x="496.5" y="26" class="val">0.923</text><path d="M495.8 10 l6 12 l-6 12 l-6 -12z" class="paper"><title>Paper: 0.926</title></path><text x="200" y="59" class="lab" text-anchor="end">Without CNN</text><rect x="210" y="47" width="306.5" height="18" rx="3" class="bar"><title>Without CNN: 0.939 (paper 0.880)</title></rect><text x="522.5" y="60" class="val">0.939</text><path d="M421.1 44 l6 12 l-6 12 l-6 -12z" class="paper"><title>Paper: 0.880</title></path><text x="200" y="93" class="lab" text-anchor="end">Without BiLSTM</text><rect x="210" y="81" width="133.1" height="18" rx="3" class="bar"><title>Without BiLSTM: 0.832 (paper 0.870)</title></rect><text x="349.1" y="94" class="val">0.832</text><path d="M404.9 78 l6 12 l-6 12 l-6 -12z" class="paper"><title>Paper: 0.870</title></path><text x="200" y="127" class="lab" text-anchor="end">Without Adam (SGD)</text><rect x="210" y="115" width="67.4" height="18" rx="3" class="bar"><title>Without Adam (SGD): 0.792 (paper 0.890)</title></rect><text x="283.4" y="128" class="val">0.792</text><path d="M437.4 112 l6 12 l-6 12 l-6 -12z" class="paper"><title>Paper: 0.890</title></path></svg></div>
+  </div>
+  <div class="legend"><span><i style="background:var(--accent)"></i>Full model with Adam</span><span><i class="d"></i>Paper's number</span></div>
+  <ul>
+    <li><b>SGD</b> is still at 79.2% after 50 epochs. Adaptive optimizers converge much faster,
+      especially for embedding rows of rare words, which receive gradients only occasionally.</li>
+    <li><b>Adam, AdamW and RMSprop</b> are within the seed-to-seed spread of each other, so Adam is not clearly best.</li>
+    <li><b>The BiLSTM matters most</b> (-9.1 pts when removed).
+      Removing the CNN changes accuracy by +1.6 pts.</li>
+  </ul>
+</section>
+
+<section id="grid">
+  <h2><span class="n">07</span>Learning rate and batch size</h2>
+  <div class="tw"><table class="grid"><thead><tr><th>Learning rate</th><th>Batch 32</th><th>Batch 64</th><th>Batch 128</th></tr></thead><tbody><tr><td><b>1e-05</b></td><td><div class="mini"><span style="width:38%"></span></div>0.752<small> · 20 ep</small></td><td><div class="mini"><span style="width:34%"></span></div>0.734<small> · 20 ep</small></td><td><div class="mini"><span style="width:29%"></span></div>0.717<small> · 20 ep</small></td></tr><tr><td><b>0.0001</b></td><td><div class="mini"><span style="width:74%"></span></div>0.898<small> · 20 ep</small></td><td><div class="mini"><span style="width:68%"></span></div>0.870<small> · 20 ep</small></td><td><div class="mini"><span style="width:61%"></span></div>0.843<small> · 20 ep</small></td></tr><tr><td><b>0.001</b></td><td><div class="mini"><span style="width:83%"></span></div>0.930<small> · 11 ep</small></td><td><div class="mini"><span style="width:81%"></span></div>0.923<small> · 11 ep</small></td><td><div class="mini"><span style="width:81%"></span></div>0.924<small> · 14 ep</small></td></tr></tbody></table></div>
+  <p>Each run is capped at 20 epochs. At lr 1e-5 the model is still far from converged, and lr 0.001 is best at every
+  batch size, as the paper found.</p>
+</section>
+
+<section id="errors">
+  <h2><span class="n">08</span>Where the model goes wrong</h2>
+  <div class="two">
+    <div class="card"><h3>Accuracy by language pair</h3><svg viewBox="0 0 680 204" role="img" class="chart"><line x1="210.0" x2="210.0" y1="6" y2="178" class="grid"/><text x="210.0" y="196" class="tick" text-anchor="middle">0.750</text><line x1="311.5" x2="311.5" y1="6" y2="178" class="grid"/><text x="311.5" y="196" class="tick" text-anchor="middle">0.812</text><line x1="413.0" x2="413.0" y1="6" y2="178" class="grid"/><text x="413.0" y="196" class="tick" text-anchor="middle">0.875</text><line x1="514.5" x2="514.5" y1="6" y2="178" class="grid"/><text x="514.5" y="196" class="tick" text-anchor="middle">0.938</text><line x1="616.0" x2="616.0" y1="6" y2="178" class="grid"/><text x="616.0" y="196" class="tick" text-anchor="middle">1.000</text><text x="200" y="25" class="lab" text-anchor="end">English-Kokborok</text><rect x="210" y="13" width="351.9" height="18" rx="3" class="bar hl"><title>English-Kokborok: 0.967</title></rect><text x="567.9" y="26" class="val">0.967</text><text x="200" y="59" class="lab" text-anchor="end">Hindi-English</text><rect x="210" y="47" width="326.6" height="18" rx="3" class="bar hl"><title>Hindi-English: 0.951</title></rect><text x="542.6" y="60" class="val">0.951</text><text x="200" y="93" class="lab" text-anchor="end">Spanish-English</text><rect x="210" y="81" width="264.5" height="18" rx="3" class="bar hl"><title>Spanish-English: 0.913</title></rect><text x="480.5" y="94" class="val">0.913</text><text x="200" y="127" class="lab" text-anchor="end">Bengali-English</text><rect x="210" y="115" width="178.1" height="18" rx="3" class="bar hl"><title>Bengali-English: 0.860</title></rect><text x="394.1" y="128" class="val">0.860</text><text x="200" y="161" class="lab" text-anchor="end">Kokborok-Bengali</text><rect x="210" y="149" width="163.9" height="18" rx="3" class="bar hl"><title>Kokborok-Bengali: 0.851</title></rect><text x="379.9" y="162" class="val">0.851</text></svg></div>
+    <div><div class="tw"><table class=""><thead><tr><th>Language</th><th>Precision</th><th>Recall</th><th>F1</th><th>Test tokens</th></tr></thead><tbody><tr><td>English</td><td>0.934</td><td>0.955</td><td>0.945</td><td>26,157</td></tr><tr><td>Hindi</td><td>0.890</td><td>0.942</td><td>0.915</td><td>9,524</td></tr><tr><td>Bengali</td><td>0.916</td><td>0.771</td><td>0.837</td><td>5,758</td></tr><tr><td>Kokborok</td><td>0.915</td><td>0.949</td><td>0.932</td><td>4,919</td></tr><tr><td>Spanish</td><td>0.940</td><td>0.872</td><td>0.905</td><td>5,755</td></tr></tbody></table></div></div>
+  </div>
+  <h3>Confusion matrix, test tokens (seed 42)</h3>
+  <div class="tw"><table class="cmx"><thead><tr><th>Actual ↓ / Predicted →</th><th>English</th><th>Hindi</th><th>Bengali</th><th>Kokborok</th><th>Spanish</th></tr></thead><tbody><tr><th>English</th><td class="cm d" style="--s:92%" data-strong="1" title="English predicted as English: 24,989 tokens">24,989</td><td class="cm" style="--s:59%" data-strong="1" title="English predicted as Hindi: 627 tokens">627</td><td class="cm" style="--s:47%" data-strong="0" title="English predicted as Bengali: 182 tokens">182</td><td class="cm" style="--s:39%" data-strong="0" title="English predicted as Kokborok: 74 tokens">74</td><td class="cm" style="--s:51%" data-strong="0" title="English predicted as Spanish: 285 tokens">285</td></tr><tr><th>Hindi</th><td class="cm" style="--s:56%" data-strong="0" title="Hindi predicted as English: 472 tokens">472</td><td class="cm d" style="--s:83%" data-strong="1" title="Hindi predicted as Hindi: 8,972 tokens">8,972</td><td class="cm" style="--s:37%" data-strong="0" title="Hindi predicted as Bengali: 61 tokens">61</td><td class="cm" style="--s:16%" data-strong="0" title="Hindi predicted as Kokborok: 5 tokens">5</td><td class="cm" style="--s:25%" data-strong="0" title="Hindi predicted as Spanish: 14 tokens">14</td></tr><tr><th>Bengali</th><td class="cm" style="--s:57%" data-strong="1" title="Bengali predicted as English: 543 tokens">543</td><td class="cm" style="--s:55%" data-strong="0" title="Bengali predicted as Hindi: 420 tokens">420</td><td class="cm d" style="--s:76%" data-strong="1" title="Bengali predicted as Bengali: 4,437 tokens">4,437</td><td class="cm" style="--s:53%" data-strong="0" title="Bengali predicted as Kokborok: 349 tokens">349</td><td class="cm" style="--s:21%" data-strong="0" title="Bengali predicted as Spanish: 9 tokens">9</td></tr><tr><th>Kokborok</th><td class="cm" style="--s:41%" data-strong="0" title="Kokborok predicted as English: 89 tokens">89</td><td class="cm" style="--s:10%" data-strong="0" title="Kokborok predicted as Hindi: 2 tokens">2</td><td class="cm" style="--s:46%" data-strong="0" title="Kokborok predicted as Bengali: 150 tokens">150</td><td class="cm d" style="--s:77%" data-strong="1" title="Kokborok predicted as Kokborok: 4,668 tokens">4,668</td><td class="cm" style="--s:22%" data-strong="0" title="Kokborok predicted as Spanish: 10 tokens">10</td></tr><tr><th>Spanish</th><td class="cm" style="--s:59%" data-strong="1" title="Spanish predicted as English: 659 tokens">659</td><td class="cm" style="--s:37%" data-strong="0" title="Spanish predicted as Hindi: 58 tokens">58</td><td class="cm" style="--s:26%" data-strong="0" title="Spanish predicted as Bengali: 16 tokens">16</td><td class="cm" style="--s:13%" data-strong="0" title="Spanish predicted as Kokborok: 3 tokens">3</td><td class="cm d" style="--s:77%" data-strong="1" title="Spanish predicted as Spanish: 5,019 tokens">5,019</td></tr></tbody></table></div>
+  <ul>
+    <li><b>Most frequent error:</b> Spanish read as English (659 tokens).</li>
+    <li><b>Shared words</b> such as <i>a, no, me, come, na, ki</i> exist in more than one language.</li>
+    <li><b>Romanized Hindi and Bengali</b> share spellings (<i>ke, ki, ar, kare</i>), which causes most
+      Bengali↔Hindi errors.</li>
+    <li><b>Unknown words:</b> 9.0% of test words never appear in training. A
+      character-level layer would help.</li>
+    <li><b>Kokborok:</b> part of the error there is noise in the automatic labels.</li>
+  </ul>
+</section>
+
+<section id="limits">
+  <h2><span class="n">09</span>Limitations</h2>
+  <ol>
+    <li>75% of the data is synthetic and does not follow real code-switching grammar.</li>
+    <li>The English-Kokborok labels are automatic and need a native-speaker check.</li>
+    <li>No real Kokborok-Bengali code-mixed text was available.</li>
+    <li>Stride-1 max-pooling is our reading of the paper's architecture.</li>
+    <li>The mBERT and XLM-R baselines were not completed because of time and hardware limits.</li>
+  </ol>
+  <p class="warn">Before submission, the paper's dataset section must describe the synthetic data and the silver labels,
+  and the claims marked "Does not hold" or "Not verified" above should be revised.</p>
+</section>
+
+<section id="repro">
+  <h2><span class="n">10</span>Reproduce</h2>
+<pre>python src/prepare_data.py              # build data/processed/
+python src/run_experiments.py           # every run -> results/runs/*.json (resumable)
+python src/run_experiments.py pretrained  # mBERT + XLM-R (about 4–6 h on a laptop GPU)
+python src/make_figures.py && python src/make_report.py</pre>
+</section>
+
+<footer>Generated from 20 completed training runs (results/runs/*.json).</footer>
+</div>

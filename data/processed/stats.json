@@ -1,0 +1,72 @@
+{
+  "splits": {
+    "train": 38442,
+    "val": 4806,
+    "test": 4805
+  },
+  "pairs": {
+    "Hindi-English": {
+      "samples": 17340,
+      "real": 5232,
+      "synthetic": 12108,
+      "avg_words": 13.33,
+      "mixing_ratio": 0.334,
+      "label_counts": {
+        "English": 135082,
+        "Hindi": 96035
+      },
+      "paper_target_samples": 17340
+    },
+    "Spanish-English": {
+      "samples": 10557,
+      "real": 0,
+      "synthetic": 10557,
+      "avg_words": 11.0,
+      "mixing_ratio": 0.396,
+      "label_counts": {
+        "Spanish": 57424,
+        "English": 58716
+      },
+      "paper_target_samples": 10557
+    },
+    "Bengali-English": {
+      "samples": 8670,
+      "real": 0,
+      "synthetic": 8670,
+      "avg_words": 9.87,
+      "mixing_ratio": 0.42,
+      "label_counts": {
+        "English": 42575,
+        "Bengali": 42967
+      },
+      "paper_target_samples": 8670
+    },
+    "English-Kokborok": {
+      "samples": 6986,
+      "real": 6986,
+      "synthetic": 0,
+      "avg_words": 7.48,
+      "mixing_ratio": 0.32,
+      "label_counts": {
+        "Kokborok": 30240,
+        "English": 22026
+      },
+      "paper_target_samples": 7330
+    },
+    "Kokborok-Bengali": {
+      "samples": 4500,
+      "real": 0,
+      "synthetic": 4500,
+      "avg_words": 7.46,
+      "mixing_ratio": 0.326,
+      "label_counts": {
+        "Bengali": 14074,
+        "Kokborok": 19512
+      },
+      "paper_target_samples": 4500
+    }
+  },
+  "total_samples": 48053,
+  "total_tokens": 518651,
+  "test_tokens": 52262
+}
